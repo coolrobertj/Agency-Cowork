@@ -1,7 +1,7 @@
 # Agent Memory
 
 Personal context, preferences, and working notes.
-Last reviewed: 2026-04-25
+Last reviewed: 2026-04-26
 
 ---
 
