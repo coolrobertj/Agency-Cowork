@@ -1,7 +1,7 @@
 # Agent Memory
 
 Personal context, preferences, and working notes.
-Last reviewed: 2026-04-27
+Last reviewed: 2026-04-28
 
 ---
 
@@ -22,8 +22,8 @@ _No contacts documented yet. Contacts will be added as they appear in daily logs
 
 | Tool | Status | Notes |
 |------|--------|-------|
-| QMD (text search) | Installed (v2.1.0) | 4 collections, 38 docs indexed (2026-04-13). CLI has Unix shebang issue on Windows — not available in scheduled tasks. |
-| Embeddings (BAAI/bge-small-en-v1.5) | Operational | 384-dim, on-device. 39 chunks from 38 docs. Cache at `skills/qmd-memory/cache/embeddings`. |
+| QMD (text search) | Installed (v2.1.0) | 3 collections, 38 docs indexed (as of 2026-04-28). CLI has Unix shebang issue on Windows — not available in scheduled tasks. |
+| Embeddings (BAAI/bge-small-en-v1.5) | Degraded | 384-dim, on-device. 38 docs need embedding; vector index not built. Cache at `skills/qmd-memory/cache/embeddings`. Needs manual re-index. |
 | Scheduled maintenance | Active | Daily memory maintenance task configured. Runs daily. |
 | OneDrive sync | Not verified | Upload path not yet used. |
 
