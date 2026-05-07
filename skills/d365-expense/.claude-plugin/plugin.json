@@ -1,0 +1,5 @@
+{
+  "name": "d365-expense",
+  "version": "1.0.0",
+  "description": "Create and manage expense reports in Microsoft Dynamics 365 Finance & Operations via Playwright browser automation. Attaches corporate card transactions to new reports with approvers and cost center."
+}

@@ -1,0 +1,18 @@
+{
+  "name": "visual-explainer",
+  "description": "Generate beautiful HTML pages for diagrams, diff reviews, plan reviews, and data tables",
+  "version": "0.6.2",
+  "keywords": [
+    "visualization",
+    "diagrams",
+    "html",
+    "slides",
+    "diff-review",
+    "mermaid"
+  ],
+  "author": {
+    "name": "nicobailon"
+  },
+  "repository": "https://github.com/nicobailon/visual-explainer",
+  "license": "MIT"
+}

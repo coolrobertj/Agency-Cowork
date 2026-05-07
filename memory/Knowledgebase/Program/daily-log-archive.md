@@ -11,3 +11,15 @@ Full QMD re-index completed: installed QMD v2.1.0, created 4 collections, indexe
 ## 2026-04-14
 Two maintenance runs (scheduled + manual). No logs older than 7 days to archive; MEMORY.md still default template. QMD CLI not on PATH both times. Changes committed and pushed.
 
+
+## 2026-04-25
+- Multiple maintenance runs; compacted older logs and ran memory-flush. QMD re-index and embedding refresh executed; search verified.
+
+## 2026-04-26
+- Reviewed MEMORY.md (Last reviewed updated). Re-index run and changes committed.
+
+## 2026-04-27
+- QMD re-index & embedding refresh; verified search; no stale facts.
+
+## 2026-04-28
+- Scheduled maintenance and manual QMD re-index; embeddings refreshed and index healthy.

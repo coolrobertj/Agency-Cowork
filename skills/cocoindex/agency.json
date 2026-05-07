@@ -1,0 +1,12 @@
+{
+  "category": "development",
+  "engines": [
+    "claude",
+    "copilot"
+  ],
+  "origin": {
+    "repository": "https://github.com/cocoindex-io/cocoindex-claude",
+    "license": "Apache-2.0",
+    "author": "CocoIndex Team"
+  }
+}

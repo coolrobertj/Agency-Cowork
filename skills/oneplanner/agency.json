@@ -1,0 +1,9 @@
+{
+  "category": "project-management",
+  "engines": ["claude", "copilot"],
+  "priority": "high",
+  "requires": {
+    "server": "npm run dev:server",
+    "python": ">=3.11"
+  }
+}

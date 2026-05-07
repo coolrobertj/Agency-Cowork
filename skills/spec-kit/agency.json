@@ -1,0 +1,7 @@
+{
+  "category": "development",
+  "engines": [
+    "claude",
+    "copilot"
+  ]
+}

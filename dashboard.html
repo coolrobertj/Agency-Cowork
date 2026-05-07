@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workday Command Center — Robert Jordan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js"></script>
+<style>
+  :root {
+    --surface-0: oklch(98% 0.005 55);
+    --surface-1: oklch(96% 0.008 55);
+    --surface-2: oklch(93% 0.01 55);
+    --border: oklch(88% 0.012 55);
+    --border-light: oklch(92% 0.008 55);
+    --text-primary: oklch(18% 0.015 55);
+    --text-secondary: oklch(40% 0.02 55);
+    --text-tertiary: oklch(55% 0.015 55);
+    --accent-ink: oklch(35% 0.12 250);
+    --accent-surface: oklch(92% 0.04 250);
+    --accent-border: oklch(82% 0.06 250);
+    --urgent-ink: oklch(42% 0.15 25);
+    --urgent-surface: oklch(93% 0.04 25);
+    --urgent-border: oklch(82% 0.08 25);
+    --success-ink: oklch(38% 0.1 155);
+    --success-surface: oklch(93% 0.04 155);
+    --warning-ink: oklch(42% 0.12 75);
+    --warning-surface: oklch(94% 0.04 75);
+    --warning-border: oklch(84% 0.06 75);
+    --focus-surface: oklch(93% 0.03 290);
+    --focus-border: oklch(78% 0.06 290);
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --hover-tint: oklch(96.5% 0.01 250);
+    --row-rule: oklch(94% 0.005 55);
+    --live-dot: oklch(55% 0.18 155);
+    --dot-green: oklch(55% 0.18 155);
+    --dot-yellow: oklch(65% 0.18 85);
+    --dot-red: oklch(55% 0.18 25);
+  }
+
+  /* ─── DARK THEME ─── */
+  [data-theme="dark"] {
+    --surface-0: oklch(14% 0.01 250);
+    --surface-1: oklch(18% 0.012 250);
+    --surface-2: oklch(22% 0.014 250);
+    --border: oklch(28% 0.015 250);
+    --border-light: oklch(24% 0.012 250);
+    --text-primary: oklch(90% 0.01 55);
+    --text-secondary: oklch(72% 0.015 55);
+    --text-tertiary: oklch(55% 0.012 250);
+    --accent-ink: oklch(72% 0.1 250);
+    --accent-surface: oklch(24% 0.04 250);
+    --accent-border: oklch(35% 0.06 250);
+    --urgent-ink: oklch(72% 0.12 25);
+    --urgent-surface: oklch(22% 0.04 25);
+    --urgent-border: oklch(32% 0.06 25);
+    --success-ink: oklch(68% 0.1 155);
+    --success-surface: oklch(22% 0.04 155);
+    --warning-ink: oklch(72% 0.12 75);
+    --warning-surface: oklch(22% 0.04 75);
+    --warning-border: oklch(32% 0.06 75);
+    --focus-surface: oklch(22% 0.03 290);
+    --focus-border: oklch(35% 0.06 290);
+    --hover-tint: oklch(22% 0.02 250);
+    --row-rule: oklch(22% 0.01 250);
+    --live-dot: oklch(62% 0.18 155);
+    --dot-green: oklch(62% 0.18 155);
+    --dot-yellow: oklch(70% 0.18 85);
+    --dot-red: oklch(62% 0.18 25);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Instrument Sans', system-ui, sans-serif;
+    background: var(--surface-0);
+    color: var(--text-primary);
+    line-height: 1.55;
+    min-height: 100vh;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  /* ─── HEADER ─── */
+  .masthead {
+    border-bottom: 1px solid var(--border);
+    padding: 2rem 0 1.6rem;
+    background: var(--surface-1);
+  }
+  .masthead-inner {
+    max-width: 1340px;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+  .masthead h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 500;
+    font-size: 1.7rem;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: var(--text-primary);
+  }
+  .masthead h1 span {
+    display: block;
+    font-family: 'Instrument Sans', system-ui, sans-serif;
+    font-size: 0.73rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 0.3rem;
+  }
+  .masthead-meta {
+    text-align: right;
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+    line-height: 1.6;
+  }
+  .masthead-meta strong {
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+  .live-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--live-dot);
+    border-radius: 50%;
+    margin-right: 4px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* ─── LAYOUT ─── */
+  .dashboard {
+    max-width: 1340px;
+    margin: 0 auto;
+    padding: 2rem 2.5rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 2rem;
+  }
+
+  /* ─── SECTION PANELS ─── */
+  .panel {
+    background: var(--surface-1);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.4rem 0.8rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .panel-header h2 {
+    font-family: 'Instrument Sans', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .panel-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: var(--accent-surface);
+    color: var(--accent-ink);
+  }
+  .panel-badge.urgent {
+    background: var(--urgent-surface);
+    color: var(--urgent-ink);
+  }
+  .panel-body {
+    padding: 0;
+  }
+
+  /* ─── CALENDAR (top-left, spans full width on mobile) ─── */
+  .panel--calendar { grid-column: 1 / -1; }
+  .day-group { border-bottom: 1px solid var(--border-light); }
+  .day-group:last-child { border-bottom: none; }
+  .day-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    padding: 0.8rem 1.4rem 0.3rem;
+    background: var(--surface-0);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+  .day-label .day-date {
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-left: 0.5rem;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 0.75rem;
+  }
+  .meeting-item {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    align-items: baseline;
+    padding: 0.55rem 1.4rem;
+    border-bottom: 1px solid var(--row-rule);
+    transition: background 0.15s ease;
+    cursor: default;
+  }
+  .meeting-item:last-child { border-bottom: none; }
+  .meeting-item:hover { background: var(--hover-tint); }
+  .meeting-time {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    font-variant-numeric: tabular-nums;
+  }
+  .meeting-title {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  .meeting-people {
+    font-size: 0.72rem;
+    color: var(--text-tertiary);
+    text-align: right;
+    max-width: 240px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .meeting-item.highlight {
+    background: var(--accent-surface);
+    border-left: 3px solid var(--accent-ink);
+    padding-left: calc(1.4rem - 3px);
+  }
+
+  /* ─── EMAIL LIST ─── */
+  .email-item {
+    padding: 0.9rem 1.4rem;
+    border-bottom: 1px solid var(--border-light);
+    transition: background 0.15s ease;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .email-item:last-child { border-bottom: none; }
+  .email-item:hover { background: var(--hover-tint); }
+  .email-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.2rem;
+  }
+  .email-sender {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .email-time {
+    font-size: 0.68rem;
+    color: var(--text-tertiary);
+    font-variant-numeric: tabular-nums;
+  }
+  .email-subject {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 0.2rem;
+  }
+  .email-summary {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    line-height: 1.45;
+  }
+  .email-tag {
+    display: inline-block;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-right: 6px;
+    vertical-align: 1px;
+  }
+  .email-tag.operational {
+    background: var(--urgent-surface);
+    color: var(--urgent-ink);
+    border: 1px solid var(--urgent-border);
+  }
+  .email-tag.info {
+    background: var(--surface-2);
+    color: var(--text-tertiary);
+    border: 1px solid var(--border);
+  }
+
+  /* ─── TEAMS ACTIVITY ─── */
+  .teams-thread {
+    padding: 1rem 1.4rem;
+    border-bottom: 1px solid var(--border-light);
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: background 0.15s ease;
+    cursor: pointer;
+  }
+  .teams-thread:hover { background: var(--hover-tint); }
+  .teams-thread:last-child { border-bottom: none; }
+  .thread-channel {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+    margin-bottom: 0.4rem;
+  }
+  .thread-message {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem;
+    margin-bottom: 0.55rem;
+  }
+  .thread-message:last-child { margin-bottom: 0; }
+  .thread-avatar {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--accent-surface);
+    border: 1px solid var(--accent-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.58rem;
+    font-weight: 700;
+    color: var(--accent-ink);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .thread-sender {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .thread-text {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+  }
+  .thread-outcome {
+    margin-top: 0.5rem;
+    padding: 0.4rem 0.7rem;
+    background: var(--success-surface);
+    border-radius: var(--radius-sm);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--success-ink);
+  }
+
+  /* ─── ACTION ITEMS ─── */
+  .panel--actions { grid-column: 1 / -1; }
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+  .action-category {
+    border-right: 1px solid var(--border-light);
+    padding: 0;
+  }
+  .action-category:last-child { border-right: none; }
+  .action-cat-header {
+    padding: 0.8rem 1.2rem 0.5rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    border-bottom: 1px solid var(--border-light);
+    background: var(--surface-0);
+  }
+  .action-item {
+    padding: 0.65rem 1.2rem;
+    border-bottom: 1px solid var(--row-rule);
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    transition: background 0.15s ease;
+  }
+  .action-item:hover { background: var(--hover-tint); }
+  .action-item:last-child { border-bottom: none; }
+  .action-item .action-owner {
+    display: block;
+    font-size: 0.66rem;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    margin-top: 0.2rem;
+  }
+  .action-priority {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    margin-right: 5px;
+    vertical-align: 1px;
+    flex-shrink: 0;
+  }
+  .priority-high { background: var(--urgent-ink); }
+  .priority-med { background: var(--warning-ink); }
+  .priority-low { background: var(--accent-ink); }
+
+  /* ─── STATUS STRIP ─── */
+  .status-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-1);
+  }
+  .status-cell {
+    padding: 0.8rem 1.4rem;
+    border-right: 1px solid var(--border-light);
+    text-align: center;
+  }
+  .status-cell:last-child { border-right: none; }
+  .status-label {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 0.25rem;
+  }
+  .status-value {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .status-value.ok { color: var(--success-ink); }
+  .status-value.warn { color: var(--warning-ink); }
+  .status-value.alert { color: var(--urgent-ink); }
+  .status-detail {
+    font-size: 0.65rem;
+    color: var(--text-tertiary);
+    margin-top: 0.1rem;
+  }
+
+  /* ─── SCROLLABLE PANELS ─── */
+  .scroll-body {
+    max-height: 460px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+  .scroll-body::-webkit-scrollbar { width: 5px; }
+  .scroll-body::-webkit-scrollbar-track { background: transparent; }
+  .scroll-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  .calendar-scroll { max-height: 320px; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 960px) {
+    .dashboard { grid-template-columns: 1fr; }
+    .action-grid { grid-template-columns: 1fr; }
+    .action-category { border-right: none; border-bottom: 1px solid var(--border-light); }
+    .action-category:last-child { border-bottom: none; }
+    .status-strip { grid-template-columns: repeat(3, 1fr); }
+    .masthead-inner { flex-direction: column; align-items: flex-start; }
+    .masthead-meta { text-align: left; }
+    .meeting-item { grid-template-columns: 90px 1fr; }
+    .meeting-people { display: none; }
+  }
+  @media (max-width: 600px) {
+    .dashboard { padding: 1rem; gap: 1rem; }
+    .status-strip { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ─── SECTION INTRO ─── */
+  .section-intro {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding-bottom: 0;
+  }
+  .section-intro h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+  .section-intro .divider {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ─── TRACKING BAR ─── */
+  .tracking-bar {
+    grid-column: 1 / -1;
+    background: var(--surface-1);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.4rem;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .tracking-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+  }
+  .tracking-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .tracking-dot.green { background: var(--dot-green); }
+  .tracking-dot.yellow { background: var(--dot-yellow); }
+  .tracking-dot.red { background: var(--dot-red); }
+  .tracking-label { font-weight: 600; }
+
+  /* ─── DISMISSABLE ITEMS ─── */
+  .dismiss-check {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+    position: relative;
+    background: transparent;
+  }
+  .dismiss-check:hover {
+    border-color: var(--success-ink);
+    background: var(--success-surface);
+  }
+  .dismiss-check:checked {
+    border-color: var(--success-ink);
+    background: var(--success-ink);
+  }
+  .dismiss-check:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 10px;
+    color: white;
+    font-weight: 700;
+  }
+  .dismissable {
+    transition: opacity 0.35s ease, max-height 0.4s ease 0.1s, padding 0.4s ease 0.1s, margin 0.4s ease 0.1s, border-width 0.4s ease 0.1s;
+    overflow: hidden;
+  }
+  .dismissable.dismissed {
+    opacity: 0;
+    max-height: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    border-bottom-width: 0 !important;
+  }
+
+  /* Checkbox placement tweaks per item type */
+  .email-item.dismissable {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 0.6rem;
+    align-items: start;
+  }
+  .email-item.dismissable .dismiss-check { margin-top: 0.15rem; }
+  .email-item.dismissable .email-content { min-width: 0; }
+
+  .action-item.dismissable {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 0.5rem;
+    align-items: start;
+  }
+  .action-item.dismissable .dismiss-check { margin-top: 0.1rem; }
+  .action-item.dismissable .action-content { min-width: 0; }
+
+  .teams-thread.dismissable {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 0.6rem;
+    align-items: start;
+  }
+  .teams-thread.dismissable .dismiss-check { margin-top: 0.2rem; }
+  .teams-thread.dismissable .thread-content { min-width: 0; }
+
+  .issue-item.dismissable {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 0.6rem;
+    align-items: start;
+  }
+  .issue-item.dismissable .dismiss-check { margin-top: 0.15rem; }
+  .issue-item.dismissable .issue-content { min-width: 0; }
+
+  /* Badge counter animation */
+  .panel-badge { transition: all 0.3s ease; }
+
+  /* ─── MARK AS READ BUTTON ─── */
+  .mark-read-btn {
+    appearance: none;
+    border: 1px solid var(--border);
+    background: var(--surface-0);
+    color: var(--text-tertiary);
+    font-family: 'Instrument Sans', system-ui, sans-serif;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .mark-read-btn:hover {
+    border-color: var(--accent-ink);
+    color: var(--accent-ink);
+    background: var(--accent-surface);
+  }
+  .mark-read-btn.reading {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .mark-read-btn.done {
+    border-color: var(--success-ink);
+    color: var(--success-ink);
+    background: var(--success-surface);
+    pointer-events: none;
+  }
+  .email-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.4rem;
+  }
+  .email-item .email-actions .mark-read-btn {
+    position: relative;
+    z-index: 2;
+  }
+  /* Auth status bar */
+  .graph-auth-bar {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.5rem 1.4rem;
+    background: var(--warning-surface);
+    border-bottom: 1px solid var(--warning-border);
+    font-size: 0.75rem;
+    color: var(--warning-ink);
+  }
+  .graph-auth-bar.visible { display: flex; }
+  .graph-auth-bar button {
+    appearance: none;
+    border: 1px solid var(--warning-ink);
+    background: transparent;
+    color: var(--warning-ink);
+    font-family: 'Instrument Sans', system-ui, sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .graph-auth-bar button:hover {
+    background: var(--warning-ink);
+    color: white;
+  }
+  /* Config modal */
+  .config-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: oklch(0% 0 0 / 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  .config-overlay.visible { display: flex; }
+  .config-modal {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    max-width: 480px;
+    width: 90%;
+  }
+  .config-modal h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+  .config-modal p {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  .config-modal code {
+    background: var(--surface-2);
+    padding: 1px 4px;
+    border-radius: 2px;
+    font-size: 0.72rem;
+  }
+  .config-modal input {
+    width: 100%;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-0);
+    color: var(--text-primary);
+    font-family: 'Instrument Sans', system-ui, sans-serif;
+    font-size: 0.82rem;
+    margin-bottom: 1rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+  .config-modal input:focus { border-color: var(--accent-ink); }
+  .config-modal .btn-row {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+  }
+  .config-modal .btn-primary {
+    appearance: none;
+    border: none;
+    background: var(--accent-ink);
+    color: white;
+    font-family: 'Instrument Sans', system-ui, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.45rem 1.2rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+  .config-modal .btn-primary:hover { opacity: 0.85; }
+  .config-modal .btn-cancel {
+    appearance: none;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: 'Instrument Sans', system-ui, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.45rem 1.2rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+
+  /* ─── THEME TOGGLE ─── */
+  .theme-toggle {
+    position: relative;
+    width: 44px; height: 24px;
+    background: var(--border);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.25s ease;
+    flex-shrink: 0;
+  }
+  .theme-toggle::after {
+    content: '';
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--text-primary);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  [data-theme="dark"] .theme-toggle {
+    background: var(--accent-surface);
+    border-color: var(--accent-border);
+  }
+  [data-theme="dark"] .theme-toggle::after {
+    transform: translateX(20px);
+  }
+  .theme-toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .theme-toggle-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ MASTHEAD ═══════════ -->
+<header class="masthead">
+  <div class="masthead-inner">
+    <h1>
+      <span>Workday Command Center</span>
+      Robert Jordan
+    </h1>
+    <div class="masthead-meta">
+      <div class="theme-toggle-wrap" style="justify-content: flex-end; margin-bottom: 0.4rem;">
+        <span class="theme-toggle-label" id="theme-label">Light</span>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" role="switch" aria-checked="false"></button>
+      </div>
+      <span class="live-dot"></span> <strong>Live</strong> — Sunday, April 12, 2026<br>
+      WWIC · EA Cube · BizApps Actuals
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════ STATUS STRIP ═══════════ -->
+<div class="status-strip">
+  <div class="status-cell">
+    <div class="status-label">Meetings Today</div>
+    <div class="status-value">0</div>
+    <div class="status-detail">Focus time only</div>
+  </div>
+  <div class="status-cell">
+    <div class="status-label">Tomorrow</div>
+    <div class="status-value warn">7</div>
+    <div class="status-detail">7:30a – 4:00p</div>
+  </div>
+  <div class="status-cell">
+    <div class="status-label">Emails (2d)</div>
+    <div class="status-value">6</div>
+    <div class="status-detail">1 operational</div>
+  </div>
+  <div class="status-cell">
+    <div class="status-label">Action Items</div>
+    <div class="status-value alert">16</div>
+    <div class="status-detail">Open follow-ups</div>
+  </div>
+  <div class="status-cell">
+    <div class="status-label">Data Health</div>
+    <div class="status-value ok">OK</div>
+    <div class="status-detail">YTD published 4/10</div>
+  </div>
+</div>
+
+<main class="dashboard">
+
+  <!-- ═══════════ OPERATIONAL TRACKING ═══════════ -->
+  <div class="tracking-bar">
+    <div class="tracking-item">
+      <div class="tracking-dot green"></div>
+      <span><span class="tracking-label">Mint Tables:</span> Refreshed — Q3 validated</span>
+    </div>
+    <div class="tracking-item">
+      <div class="tracking-dot yellow"></div>
+      <span><span class="tracking-label">BACV Feed:</span> Logic fix applied — monitoring</span>
+    </div>
+    <div class="tracking-item">
+      <div class="tracking-dot green"></div>
+      <span><span class="tracking-label">Payout Risk:</span> None identified</span>
+    </div>
+    <div class="tracking-item">
+      <div class="tracking-dot yellow"></div>
+      <span><span class="tracking-label">GPS Raw Feeds:</span> SQL accessible — shortcut pending</span>
+    </div>
+  </div>
+
+  <!-- ═══════════ CALENDAR ═══════════ -->
+  <div class="section-intro"><h3>This Week</h3><div class="divider"></div></div>
+
+  <div class="panel panel--calendar">
+    <div class="panel-header">
+      <h2>Calendar</h2>
+      <span class="panel-badge">49 events this week</span>
+    </div>
+    <div class="panel-body scroll-body calendar-scroll">
+      <!-- SUNDAY -->
+      <div class="day-group">
+        <div class="day-label">Sun <span class="day-date">April 12</span></div>
+        <div class="meeting-item">
+          <span class="meeting-time">12:00a – 2:00a</span>
+          <span class="meeting-title">🟩 Focus Time</span>
+          <span class="meeting-people">—</span>
+        </div>
+      </div>
+      <!-- MONDAY -->
+      <div class="day-group">
+        <div class="day-label">Mon <span class="day-date">April 13</span></div>
+        <div class="meeting-item">
+          <span class="meeting-time">7:30a – 8:00a</span>
+          <span class="meeting-title">BCC (Leadership Invite Only)</span>
+          <span class="meeting-people">R. Baker, J. Brown, A. Peavey, D. Jackson</span>
+        </div>
+        <div class="meeting-item">
+          <span class="meeting-time">10:00a – 10:30a</span>
+          <span class="meeting-title">Weekly MCAPS-DE Office Hours</span>
+          <span class="meeting-people">D. Sharma, F. Correa, BI COE</span>
+        </div>
+        <div class="meeting-item highlight">
+          <span class="meeting-time">11:00a – 11:30a</span>
+          <span class="meeting-title">FY26 WWIC Change Control Board Sync</span>
+          <span class="meeting-people">A. Anand, D. Mayer, W. Tan, R. Donnell</span>
+        </div>
+        <div class="meeting-item">
+          <span class="meeting-time">11:35a – 12:30p</span>
+          <span class="meeting-title">Davina / Robert</span>
+          <span class="meeting-people">D. Chan</span>
+        </div>
+        <div class="meeting-item highlight">
+          <span class="meeting-time">2:05p – 2:30p</span>
+          <span class="meeting-title">BizApps Actuals – All Up Weekly</span>
+          <span class="meeting-people">V. Thombre, A. Anand, D. Mayer, B. Ray</span>
+        </div>
+        <div class="meeting-item">
+          <span class="meeting-time">3:00p – 3:25p</span>
+          <span class="meeting-title">Weekly 1:1 | Robert – Vaibhav</span>
+          <span class="meeting-people">V. Thombre</span>
+        </div>
+        <div class="meeting-item">
+          <span class="meeting-time">3:30p – 4:00p</span>
+          <span class="meeting-title">Friendly / Finance 1:1</span>
+          <span class="meeting-people">P. Kumar Gurumurthy</span>
+        </div>
+      </div>
+      <!-- TUESDAY -->
+      <div class="day-group">
+        <div class="day-label">Tue <span class="day-date">April 14</span></div>
+        <div class="meeting-item highlight">
+          <span class="meeting-time">11:45a – 12:30p</span>
+          <span class="meeting-title">EMP WWIC SPCI Series</span>
+          <span class="meeting-people">V. Thombre, D. Mayer, J. Ruddy, D. Whiteside</span>
+        </div>
+        <div class="meeting-item highlight">
+          <span class="meeting-time">1:30p – 2:30p</span>
+          <span class="meeting-title">Weekly Fed/Corp EA Cube / NCE Sync</span>
+          <span class="meeting-people">D. Rymes, A. Ng, A. Anand, R. Donnell</span>
+        </div>
+        <div class="meeting-item">
+          <span class="meeting-time">2:30p – 3:15p</span>
+          <span class="meeting-title">Andrea / Robert Monthly Sync</span>
+          <span class="meeting-people">A. Campos</span>
+        </div>
+        <div class="meeting-item">
+          <span class="meeting-time">4:00p – 5:00p</span>
+          <span class="meeting-title">Investment Sync Teams Channel (Opt In)</span>
+          <span class="meeting-people">R. Baker, M. Hooda</span>
+        </div>
+      </div>
+      <!-- WEDNESDAY -->
+      <div class="day-group">
+        <div class="day-label">Wed <span class="day-date">April 15</span></div>
+        <div class="meeting-item">
+          <span class="meeting-time">10:00a – 11:00a</span>
+          <span class="meeting-title">[Advanced] EEO AI Accelerator</span>
+          <span class="meeting-people">E. Chang, C. Haydon</span>
+        </div>
+        <div class="meeting-item">
+          <span class="meeting-time">11:35a – 12:30p</span>
+          <span class="meeting-title">Agent Builders: M365 Copilot Office Hours</span>
+          <span class="meeting-people">A. Galar, C. Akman, A. Rosenkranz</span>
+        </div>
+        <div class="meeting-item">
+          <span class="meeting-time">12:00p – 1:00p</span>
+          <span class="meeting-title">AI Agent Launchpad Americas Series 2</span>
+          <span class="meeting-people">S. Annoscia, R. Raillard, A. Sherif</span>
+        </div>
+        <div class="meeting-item highlight">
+          <span class="meeting-time">1:00p – 2:00p</span>
+          <span class="meeting-title">Actuals Data Health Monitoring</span>
+          <span class="meeting-people">V. Thombre, A. Anand, D. Mayer, B. Ray</span>
+        </div>
+        <div class="meeting-item highlight">
+          <span class="meeting-time">1:30p – 2:00p</span>
+          <span class="meeting-title">Engineering Issues Impacting Comp – WWIC</span>
+          <span class="meeting-people">A. Anand, B. Ray, K. Fenrich, L. Caldwell</span>
+        </div>
+        <div class="meeting-item highlight">
+          <span class="meeting-time">3:00p – 4:00p</span>
+          <span class="meeting-title">FY26 Monthly MS Sales Stakeholder Meeting</span>
+          <span class="meeting-people">MS Sales Stakeholders</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ COMMS SECTION ═══════════ -->
+  <div class="section-intro"><h3>Communications</h3><div class="divider"></div></div>
+
+  <!-- ─── EMAILS ─── -->
+  <div class="panel">
+    <div class="panel-header">
+      <h2>Email — Last 48h</h2>
+      <span class="panel-badge urgent">1 operational</span>
+    </div>
+    <div class="panel-body scroll-body">
+      <a class="email-item" href="https://outlook.office365.com/owa/?ItemID=AAMkADllMjU2NTlmLTZiYjQtNGQ5OS04Y2E1LWIyMGM0ODEyN2UwYgBGAAAAAACz4q0rebt%2fTrQWQN24O50%2bBwDFGigVtGu7S40Kx1nINwKEAAAAAAEMAADFGigVtGu7S40Kx1nINwKEAAfJ6bwcAAA%3d&exvsurl=1&viewmodel=ReadMessageItem" target="_blank" rel="noopener" data-message-id="AAMkADllMjU2NTlmLTZiYjQtNGQ5OS04Y2E1LWIyMGM0ODEyN2UwYgBGAAAAAACz4q0rebt-TrQWQN24O50_BwDFGigVtGu7S40Kx1nINwKEAAAAAAEMAADFGigVtGu7S40Kx1nINwKEAAfJ6bwcAAA=">
+        <div class="email-meta">
+          <span class="email-sender"><span class="email-tag operational">Operational</span> MSSalesOnAzureProd</span>
+          <span class="email-time">Apr 11 · 1:48a</span>
+        </div>
+        <div class="email-subject">MS Sales Daily YTD Publish completed — PROD ↗</div>
+        <div class="email-summary">Daily YTD publish completed successfully 4/10 11:48 PM PT. Latest refreshed data available in Finance Data Lake for downstream reporting.</div>
+        <div class="email-actions"><button class="mark-read-btn" onclick="markAsRead(event, this)">✉ Mark as read</button></div>
+      </a>
+      <a class="email-item" href="https://outlook.office365.com/owa/?ItemID=AAMkADllMjU2NTlmLTZiYjQtNGQ5OS04Y2E1LWIyMGM0ODEyN2UwYgBGAAAAAACz4q0rebt%2fTrQWQN24O50%2bBwDFGigVtGu7S40Kx1nINwKEAAAJM1DGAADFGigVtGu7S40Kx1nINwKEAAfLs46OAAA%3d&exvsurl=1&viewmodel=ReadMessageItem" target="_blank" rel="noopener" data-message-id="AAMkADllMjU2NTlmLTZiYjQtNGQ5OS04Y2E1LWIyMGM0ODEyN2UwYgBGAAAAAACz4q0rebt-TrQWQN24O50_BwDFGigVtGu7S40Kx1nINwKEAAAJM1DGAADFGigVtGu7S40Kx1nINwKEAAfLs46OAAA=">
+        <div class="email-meta">
+          <span class="email-sender"><span class="email-tag info">Info</span> Francois Burianek</span>
+          <span class="email-time">Apr 11 · 5:44p</span>
+        </div>
+        <div class="email-subject">Tax filing fun for Forecast Contracts ↗</div>
+        <div class="email-summary">Discussion on reporting proceeds and cost basis from forecast/prediction contracts in FreeTaxUSA.</div>
+        <div class="email-actions"><button class="mark-read-btn" onclick="markAsRead(event, this)">✉ Mark as read</button></div>
+      </a>
+      <a class="email-item" href="https://outlook.office365.com/owa/?ItemID=AAMkADllMjU2NTlmLTZiYjQtNGQ5OS04Y2E1LWIyMGM0ODEyN2UwYgBGAAAAAACz4q0rebt%2fTrQWQN24O50%2bBwDFGigVtGu7S40Kx1nINwKEAAAJM1DGAADFGigVtGu7S40Kx1nINwKEAAfLs46LAAA%3d&exvsurl=1&viewmodel=ReadMessageItem" target="_blank" rel="noopener" data-message-id="AAMkADllMjU2NTlmLTZiYjQtNGQ5OS04Y2E1LWIyMGM0ODEyN2UwYgBGAAAAAACz4q0rebt-TrQWQN24O50_BwDFGigVtGu7S40Kx1nINwKEAAAJM1DGAADFGigVtGu7S40Kx1nINwKEAAfLs46LAAA=">
+        <div class="email-meta">
+          <span class="email-sender"><span class="email-tag info">Info</span> AJ Raczkowski</span>
+          <span class="email-time">Apr 10 · 2:52p</span>
+        </div>
+        <div class="email-subject">RE: Minor tax gains reporting ↗</div>
+        <div class="email-summary">Thread about reporting a minor's long-term capital gains. First $1,350 may be tax-free under standard deduction.</div>
+        <div class="email-actions"><button class="mark-read-btn" onclick="markAsRead(event, this)">✉ Mark as read</button></div>
+      </a>
+      <a class="email-item" href="https://outlook.office365.com/owa/?ItemID=AAMkADllMjU2NTlmLTZiYjQtNGQ5OS04Y2E1LWIyMGM0ODEyN2UwYgBGAAAAAACz4q0rebt%2fTrQWQN24O50%2bBwDFGigVtGu7S40Kx1nINwKEAAAJM1DGAADFGigVtGu7S40Kx1nINwKEAAfLs46KAAA%3d&exvsurl=1&viewmodel=ReadMessageItem" target="_blank" rel="noopener" data-message-id="AAMkADllMjU2NTlmLTZiYjQtNGQ5OS04Y2E1LWIyMGM0ODEyN2UwYgBGAAAAAACz4q0rebt-TrQWQN24O50_BwDFGigVtGu7S40Kx1nINwKEAAAJM1DGAADFGigVtGu7S40Kx1nINwKEAAfLs46KAAA=">
+        <div class="email-meta">
+          <span class="email-sender"><span class="email-tag info">Info</span> Dan Orum</span>
+          <span class="email-time">Apr 10 · 2:12p</span>
+        </div>
+        <div class="email-subject">Re: ESPP question ↗</div>
+        <div class="email-summary">Qualifying vs. disqualifying ESPP dispositions and associated tax treatment.</div>
+        <div class="email-actions"><button class="mark-read-btn" onclick="markAsRead(event, this)">✉ Mark as read</button></div>
+      </a>
+      <a class="email-item" href="https://outlook.office365.com/owa/?ItemID=AAMkADllMjU2NTlmLTZiYjQtNGQ5OS04Y2E1LWIyMGM0ODEyN2UwYgBGAAAAAACz4q0rebt%2fTrQWQN24O50%2bBwDFGigVtGu7S40Kx1nINwKEAAAJM1DGAADFGigVtGu7S40Kx1nINwKEAAfLs46NAAA%3d&exvsurl=1&viewmodel=ReadMessageItem" target="_blank" rel="noopener" data-message-id="AAMkADllMjU2NTlmLTZiYjQtNGQ5OS04Y2E1LWIyMGM0ODEyN2UwYgBGAAAAAACz4q0rebt-TrQWQN24O50_BwDFGigVtGu7S40Kx1nINwKEAAAJM1DGAADFGigVtGu7S40Kx1nINwKEAAfLs46NAAA=">
+        <div class="email-meta">
+          <span class="email-sender"><span class="email-tag info">Info</span> Tori Jesse</span>
+          <span class="email-time">Apr 10 · 5:17p</span>
+        </div>
+        <div class="email-subject">Recommendation request for Fiduciary ↗</div>
+        <div class="email-summary">Seeking fiduciary recommendations in the Redmond area from Investment Club members.</div>
+        <div class="email-actions"><button class="mark-read-btn" onclick="markAsRead(event, this)">✉ Mark as read</button></div>
+      </a>
+      <a class="email-item" href="https://outlook.office365.com/owa/?ItemID=AAMkADllMjU2NTlmLTZiYjQtNGQ5OS04Y2E1LWIyMGM0ODEyN2UwYgBGAAAAAACz4q0rebt%2fTrQWQN24O50%2bBwDFGigVtGu7S40Kx1nINwKEAAAJM1DGAADFGigVtGu7S40Kx1nINwKEAAfLs46MAAA%3d&exvsurl=1&viewmodel=ReadMessageItem" target="_blank" rel="noopener" data-message-id="AAMkADllMjU2NTlmLTZiYjQtNGQ5OS04Y2E1LWIyMGM0ODEyN2UwYgBGAAAAAACz4q0rebt-TrQWQN24O50_BwDFGigVtGu7S40Kx1nINwKEAAAJM1DGAADFGigVtGu7S40Kx1nINwKEAAfLs46MAAA=">
+        <div class="email-meta">
+          <span class="email-sender"><span class="email-tag info">Info</span> Zoher Bharmal</span>
+          <span class="email-time">Apr 10 · 4:03p</span>
+        </div>
+        <div class="email-subject">RE: Need help on MSFT ↗</div>
+        <div class="email-summary">Thread discussing whether MSFT's recent decline toward $350 may continue or rebound.</div>
+        <div class="email-actions"><button class="mark-read-btn" onclick="markAsRead(event, this)">✉ Mark as read</button></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ─── TEAMS ─── -->
+  <div class="panel">
+    <div class="panel-header">
+      <h2>Teams Activity</h2>
+      <span class="panel-badge">3 threads</span>
+    </div>
+    <div class="panel-body scroll-body">
+      <a class="teams-thread" href="https://teams.microsoft.com/l/message/19:meeting_YWZkM2NmZDktNzQyZC00NGQwLWJiZWYtMjA4YjJmZmYxODJl@thread.v2/1775932901513?context=%7B%22contextType%22:%22chat%22%7D" target="_blank" rel="noopener">
+        <div class="thread-channel">Actuals Data Health Monitoring ↗</div>
+        <div class="thread-message">
+          <div class="thread-avatar">AA</div>
+          <div>
+            <span class="thread-sender">Akshay Anand</span>
+            <div class="thread-text">Requested you run Connections to update Mint tables in Fabric for Q3 payout data validation. Confirmed pipeline update attempt.</div>
+          </div>
+        </div>
+        <div class="thread-message">
+          <div class="thread-avatar">BR</div>
+          <div>
+            <span class="thread-sender">Baishali Ray</span>
+            <div class="thread-text">InitializeTable pulling old refresh. Validated feeds — GPS and MBS actuals + facts matching. No drops in Sold Margin, UCR, Utilization, MSA.</div>
+          </div>
+        </div>
+        <div class="thread-message">
+          <div class="thread-avatar">AB</div>
+          <div>
+            <span class="thread-sender">Ana Bernal</span>
+            <div class="thread-text">Detected significant dip in raw BACV between 4/7 and 4/8 pull. GPS raw feed shortcut not yet available in Fabric — asked for updates.</div>
+          </div>
+        </div>
+        <div class="thread-message">
+          <div class="thread-avatar">RJ</div>
+          <div>
+            <span class="thread-sender">You</span>
+            <div class="thread-text">Identified ingestion logic change filtering out future fiscal months. Reprocessed and added future months back to BACV parquet. GPS contact OOF but SQL sources accessible.</div>
+          </div>
+        </div>
+        <div class="thread-outcome">✓ Ingestion validated. No payout-impacting anomalies. "We are good wrt Payouts."</div>
+      </a>
+      <a class="teams-thread" href="https://teams.microsoft.com/l/message/19:2Te4GD3r1P0mMtffcfp_1WQCzks3h1wp5CtXMgq4c6g1@thread.tacv2/1775931840235?tenantId=72f988bf-86f1-41af-91ab-2d7cd011db47&groupId=7521affa-8ff6-4f52-88af-4dde91938cff&parentMessageId=1775137229051&teamName=Copilot%20Champs&channelName=General&createdTime=1775931840235" target="_blank" rel="noopener">
+        <div class="thread-channel">Copilot Champs ↗</div>
+        <div class="thread-message">
+          <div class="thread-avatar">CE</div>
+          <div>
+            <span class="thread-sender">Candice Everts</span>
+            <div class="thread-text">Launched "Progress Your Connect" AI Agent — career coaching assistant for Connects. Drafts results-first narratives, prepares for 1:1s, builds impact statements.</div>
+          </div>
+        </div>
+      </a>
+      <a class="teams-thread" href="https://teams.microsoft.com/l/message/19:ZeE890peUnG9ESyePzW-uaqvvKSeVhWVgG8FNowNli41@thread.tacv2/1775930860367?tenantId=72f988bf-86f1-41af-91ab-2d7cd011db47&groupId=3eeb47b9-db4d-468f-a95c-ba20aeb6dc3b&parentMessageId=1775485876786&teamName=Engineering%2C%20Enablement%2C%20and%20Operations%20FTEs&channelName=General&createdTime=1775930860367" target="_blank" rel="noopener">
+        <div class="thread-channel">Engineering, Enablement & Operations FTEs ↗</div>
+        <div class="thread-message">
+          <div class="thread-avatar">EE</div>
+          <div>
+            <span class="thread-sender">Eva Etchells</span>
+            <div class="thread-text">Prompt of the Week: Copilot-based leadership network map — analyzes Teams, Outlook, meetings to generate collaboration clusters and visibility gaps.</div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ═══════════ ACTION ITEMS ═══════════ -->
+  <div class="section-intro"><h3>Open Action Items</h3><div class="divider"></div></div>
+
+  <div class="panel panel--actions">
+    <div class="panel-header">
+      <h2>Follow-ups & Deliverables</h2>
+      <span class="panel-badge urgent">16 open</span>
+    </div>
+    <div class="panel-body">
+      <div class="action-grid">
+        <!-- UAT & RELEASE -->
+        <div class="action-category">
+          <div class="action-cat-header">UAT & Release Readiness</div>
+          <div class="action-item">
+            <span class="action-priority priority-high"></span>Coordinate with Willy — validate baseline correction fix in UAT, obtain sign-off before prod
+            <span class="action-owner">→ With Willy · EA Cube/NCE Sync</span>
+          </div>
+          <div class="action-item">
+            <span class="action-priority priority-high"></span>Daily standups with Daniel + Willy to accelerate Subscription Replacement UAT closure
+            <span class="action-owner">→ With Daniel, Willy · EA Cube/NCE Sync</span>
+          </div>
+          <div class="action-item">
+            <span class="action-priority priority-med"></span>Reconfirm Willy's readiness for production push
+            <span class="action-owner">→ With Willy · EA Cube/NCE Sync</span>
+          </div>
+          <div class="action-item">
+            <span class="action-priority priority-med"></span>Notify Daniel if Ryan team requests different publish date to prevent incorrect code push timing
+            <span class="action-owner">→ With Daniel · EA Cube/NCE Sync</span>
+          </div>
+          <div class="action-item">
+            <span class="action-priority priority-low"></span>Propose options to shrink UAT cycle time to max two weeks
+            <span class="action-owner">→ Process improvement</span>
+          </div>
+        </div>
+        <!-- IC GUIDE & COMMS -->
+        <div class="action-category">
+          <div class="action-cat-header">IC Guide & Communications</div>
+          <div class="action-item">
+            <span class="action-priority priority-high"></span>Update IC Guide language for Subscription Replacement with Mike, aligned to release timing
+            <span class="action-owner">→ With Mike · EA Cube/NCE Sync</span>
+          </div>
+          <div class="action-item">
+            <span class="action-priority priority-high"></span>Obtain stakeholder sign-off on Sub Replacement changes with Willy + Mike
+            <span class="action-owner">→ With Willy, Mike · EA Cube/NCE Sync</span>
+          </div>
+          <div class="action-item">
+            <span class="action-priority priority-med"></span>Confirm IC Guide doc updates and provide closure to Vaibhav before Daniel go-ahead
+            <span class="action-owner">→ With Vaibhav · EA Cube/NCE Sync</span>
+          </div>
+          <div class="action-item">
+            <span class="action-priority priority-med"></span>Notify Ryan team about feature launch + arrange training before go-live
+            <span class="action-owner">→ With Ryan team · EA Cube/NCE Sync</span>
+          </div>
+          <div class="action-item">
+            <span class="action-priority priority-med"></span>Ensure Angela + Fed Support Team informed of baseline correction change
+            <span class="action-owner">→ With Angela, Fed Support · EA Cube/NCE Sync</span>
+          </div>
+        </div>
+        <!-- PLANNING & DATA -->
+        <div class="action-category">
+          <div class="action-cat-header">Planning & Infrastructure</div>
+          <div class="action-item">
+            <span class="action-priority priority-high"></span>Reach out to Jia (+ Eric, Robinson) to confirm FY27 Planning Cube requirement and timeline
+            <span class="action-owner">→ With Jia, Eric, Robinson</span>
+          </div>
+          <div class="action-item">
+            <span class="action-priority priority-med"></span>Schedule technical deep-dive with Natan + Wes for EA Cube transition (ensure Daniel participates)
+            <span class="action-owner">→ With Natan, Wes, Daniel</span>
+          </div>
+          <div class="action-item">
+            <span class="action-priority priority-med"></span>Verify and provide access to EA Cube / Mint source code repo and docs before technical review
+            <span class="action-owner">→ EA Cube Transition</span>
+          </div>
+          <div class="action-item">
+            <span class="action-priority priority-med"></span>Submit Mint Orchestration Access Request for mintprodserver read access
+            <span class="action-owner">→ Infra / Access</span>
+          </div>
+          <div class="action-item">
+            <span class="action-priority priority-low"></span>Print COM Guide for NCE (Chapter 3) as PDF for Subscription Replacement validation knowledge base
+            <span class="action-owner">→ Knowledge base</span>
+          </div>
+          <div class="action-item">
+            <span class="action-priority priority-low"></span>Coordinate with Daniel to adjust data pull date if delays occur
+            <span class="action-owner">→ With Daniel · Planning</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ ISSUE TRACKING ═══════════ -->
+  <div class="section-intro"><h3>Active Issues</h3><div class="divider"></div></div>
+
+  <div class="panel" style="grid-column: 1 / -1;">
+    <div class="panel-header">
+      <h2>Watching</h2>
+      <span class="panel-badge urgent">1 active</span>
+    </div>
+    <div class="panel-body">
+      <a class="email-item" href="https://outlook.office365.com/owa/?ItemID=AAMkADllMjU2NTlmLTZiYjQtNGQ5OS04Y2E1LWIyMGM0ODEyN2UwYgBGAAAAAACz4q0rebt%2fTrQWQN24O50%2bBwDFGigVtGu7S40Kx1nINwKEAAAAAAEMAADFGigVtGu7S40Kx1nINwKEAAeSUb36AAA%3d&exvsurl=1&viewmodel=ReadMessageItem" target="_blank" rel="noopener" style="border-left: 3px solid var(--urgent-ink); padding-left: calc(1.4rem - 3px);">
+        <div class="email-meta">
+          <span class="email-sender"><span class="email-tag operational">Tracking</span> Large EA Credit late from SAP</span>
+          <span class="email-time">Apr 2–6 thread</span>
+        </div>
+        <div class="email-subject">$62M extra credit applied to account — reversal required ↗</div>
+        <div class="email-summary">
+          March billed revenue may be overstated without adjustment. Potential EA Cube correction via pull-forward logic for Q3 payouts. Corporate Accounting adjusting journals for seller comp alignment. Engineering update on EA Cube timeline requested — you are on CC.
+        </div>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<!-- ═══════════ CLIENT ID CONFIG MODAL ═══════════ -->
+<div class="config-overlay" id="config-overlay">
+  <div class="config-modal">
+    <h3>Connect to Microsoft Graph</h3>
+    <p>
+      To mark emails as read from this dashboard, enter your Azure AD app registration <strong>Client ID</strong>.<br>
+      The app must be registered as a <code>Single-page application (SPA)</code> with redirect URI
+      <code>http://localhost</code> and <code>Mail.ReadWrite</code> delegated permission.
+    </p>
+    <input type="text" id="client-id-input" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" autocomplete="off" spellcheck="false">
+    <div class="btn-row">
+      <button class="btn-cancel" onclick="closeConfig()">Cancel</button>
+      <button class="btn-primary" onclick="saveConfig()">Connect</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ─── MSAL / GRAPH — MARK AS READ ───
+  let msalInstance = null;
+  let msalAccount = null;
+
+  function getClientId() { return localStorage.getItem('wcc-client-id') || '691453ba-f877-4d65-9aa1-0368443b0289'; }
+
+  function openConfig() {
+    document.getElementById('config-overlay').classList.add('visible');
+    const input = document.getElementById('client-id-input');
+    input.value = getClientId() || '';
+    input.focus();
+  }
+  function closeConfig() {
+    document.getElementById('config-overlay').classList.remove('visible');
+  }
+  function saveConfig() {
+    const id = document.getElementById('client-id-input').value.trim();
+    if (!id || !/^[0-9a-f-]{36}$/i.test(id)) {
+      document.getElementById('client-id-input').style.borderColor = 'var(--urgent-ink)';
+      return;
+    }
+    localStorage.setItem('wcc-client-id', id);
+    closeConfig();
+    initMsal();
+  }
+
+  async function initMsal() {
+    const clientId = getClientId();
+    if (!clientId || typeof msal === 'undefined') return;
+    try {
+      msalInstance = new msal.PublicClientApplication({
+        auth: {
+          clientId,
+          authority: 'https://login.microsoftonline.com/common',
+          redirectUri: window.location.origin + window.location.pathname,
+        },
+        cache: { cacheLocation: 'localStorage', storeAuthStateInCookie: false }
+      });
+      await msalInstance.initialize();
+      const resp = await msalInstance.handleRedirectPromise();
+      if (resp) msalAccount = resp.account;
+      const accounts = msalInstance.getAllAccounts();
+      if (accounts.length > 0) msalAccount = accounts[0];
+    } catch (e) { console.warn('MSAL init failed:', e); }
+  }
+
+  async function getToken() {
+    if (!msalInstance) {
+      if (!getClientId()) { openConfig(); return null; }
+      await initMsal();
+      if (!msalInstance) { openConfig(); return null; }
+    }
+    const scopes = ['Mail.ReadWrite'];
+    try {
+      if (msalAccount) {
+        const resp = await msalInstance.acquireTokenSilent({ scopes, account: msalAccount });
+        return resp.accessToken;
+      }
+    } catch (e) { /* fall through to interactive */ }
+    try {
+      const resp = await msalInstance.acquireTokenPopup({ scopes });
+      msalAccount = resp.account;
+      return resp.accessToken;
+    } catch (e) {
+      console.error('Auth failed:', e);
+      return null;
+    }
+  }
+
+  async function markAsRead(event, btn) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const emailItem = btn.closest('.email-item');
+    const messageId = emailItem?.getAttribute('data-message-id');
+    if (!messageId) { btn.textContent = '⚠ No ID'; return; }
+
+    btn.classList.add('reading');
+    btn.textContent = '⏳ Updating…';
+
+    const token = await getToken();
+    if (!token) { btn.classList.remove('reading'); btn.textContent = '✉ Mark as read'; return; }
+
+    try {
+      const resp = await fetch(`https://graph.microsoft.com/v1.0/me/messages/${messageId}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ isRead: true })
+      });
+      if (resp.ok) {
+        btn.classList.remove('reading');
+        btn.classList.add('done');
+        btn.textContent = '✓ Marked as read';
+      } else {
+        const err = await resp.json().catch(() => ({}));
+        console.error('Graph API error:', resp.status, err);
+        btn.classList.remove('reading');
+        btn.textContent = `⚠ Error ${resp.status}`;
+        setTimeout(() => { btn.textContent = '✉ Mark as read'; }, 3000);
+      }
+    } catch (e) {
+      console.error('Network error:', e);
+      btn.classList.remove('reading');
+      btn.textContent = '⚠ Network error';
+      setTimeout(() => { btn.textContent = '✉ Mark as read'; }, 3000);
+    }
+  }
+
+  // Init MSAL on load if client ID exists
+  initMsal();
+
+  // ─── THEME TOGGLE ───
+  const toggle = document.getElementById('theme-toggle');
+  const label = document.getElementById('theme-label');
+  const root = document.documentElement;
+
+  const applyTheme = (dark) => {
+    root.setAttribute('data-theme', dark ? 'dark' : 'light');
+    toggle.setAttribute('aria-checked', dark);
+    label.textContent = dark ? 'Dark' : 'Light';
+    localStorage.setItem('wcc-theme', dark ? 'dark' : 'light');
+  };
+
+  const stored = localStorage.getItem('wcc-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  applyTheme(stored ? stored === 'dark' : prefersDark);
+
+  toggle.addEventListener('click', () => {
+    applyTheme(root.getAttribute('data-theme') !== 'dark');
+  });
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    if (!localStorage.getItem('wcc-theme')) applyTheme(e.matches);
+  });
+
+  // ─── HIGHLIGHT CURRENT DAY ───
+  const now = new Date();
+  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const todayLabel = dayNames[now.getDay()];
+  document.querySelectorAll('.day-label').forEach(label => {
+    if (label.textContent.trim().startsWith(todayLabel)) {
+      label.style.background = 'var(--accent-surface)';
+      label.style.color = 'var(--accent-ink)';
+    }
+  });
+
+  // ─── AUTO-REFRESH TIMESTAMP ───
+  const meta = document.querySelector('.masthead-meta');
+  const updateTime = () => {
+    const d = new Date();
+    const timeStr = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    if (!document.getElementById('refresh-time')) {
+      const span = document.createElement('span');
+      span.id = 'refresh-time';
+      span.style.cssText = 'display:block; font-size:0.7rem; margin-top:0.2rem;';
+      meta.appendChild(span);
+    }
+    document.getElementById('refresh-time').textContent = `Last refreshed ${timeStr}`;
+  };
+  updateTime();
+  setInterval(updateTime, 60000);
+</script>
+</body>
+</html>

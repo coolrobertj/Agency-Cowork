@@ -1,0 +1,15 @@
+{
+  "name": "dashboard",
+  "description": "Interactive, live-updating knowledgebase dashboard with AI action controls",
+  "version": "0.1.0",
+  "keywords": [
+    "dashboard",
+    "knowledgebase",
+    "interactive",
+    "live-update"
+  ],
+  "author": {
+    "name": "Agency Cowork"
+  },
+  "license": "MIT"
+}

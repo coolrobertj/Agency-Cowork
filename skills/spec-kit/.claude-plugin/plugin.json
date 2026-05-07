@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "keywords": [
+    "specification",
+    "planning",
+    "tasks",
+    "development",
+    "spec-driven"
+  ],
+  "description": "Spec-driven development — create specifications, generate tasks, and implement from plans",
+  "author": {
+    "email": "",
+    "name": "Agency Cowork"
+  },
+  "name": "spec-kit"
+}

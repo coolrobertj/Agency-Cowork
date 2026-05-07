@@ -1,0 +1,10 @@
+{
+  "name": "markitdown",
+  "description": "Convert documents (PDF, Word, Excel, PowerPoint, HTML, etc.) to Markdown for the Knowledgebase",
+  "version": "1.0.0",
+  "author": {
+    "name": "Agency Cowork",
+    "email": ""
+  },
+  "keywords": ["markdown", "convert", "document", "knowledgebase", "pdf", "word", "excel"]
+}

@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "keywords": [
+    "calendar",
+    "meeting",
+    "event",
+    "schedule",
+    "outlook",
+    "invite",
+    "availability"
+  ],
+  "description": "Manage Outlook calendar events — create, update, accept, decline, find meeting times, and check availability",
+  "author": {
+    "email": "",
+    "name": "Agency Cowork"
+  },
+  "name": "calendar"
+}

@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "keywords": [
+    "weekly",
+    "report",
+    "status",
+    "executive",
+    "update"
+  ],
+  "description": "Generate weekly status reports and executive updates",
+  "author": {
+    "email": "",
+    "name": "Agency Cowork"
+  },
+  "name": "weekly-report"
+}
