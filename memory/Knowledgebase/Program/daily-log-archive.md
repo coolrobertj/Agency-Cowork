@@ -23,3 +23,6 @@ Two maintenance runs (scheduled + manual). No logs older than 7 days to archive;
 
 ## 2026-04-28
 - Scheduled maintenance and manual QMD re-index; embeddings refreshed and index healthy.
+
+## 2026-05-09
+- Daily maintenance performed. No daily logs older than 7 days to compact. Ran memory-flush script; qmd re-index and embedding refresh failed (PowerShell wrapper invokes /bin/sh). Updated memory/MEMORY.md to record failure and manual workaround. Changes committed.
