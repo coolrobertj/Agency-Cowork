@@ -26,3 +26,7 @@ Two maintenance runs (scheduled + manual). No logs older than 7 days to archive;
 
 ## 2026-05-09
 - Daily maintenance performed. No daily logs older than 7 days to compact. Ran memory-flush script; qmd re-index and embedding refresh failed (PowerShell wrapper invokes /bin/sh). Updated memory/MEMORY.md to record failure and manual workaround. Changes committed.
+
+## 2026-05-11
+- Daily maintenance performed: no unarchived logs older than 7 days to compact; archive remains current.
+- Attempted qmd re-index and embedding refresh; run failed with '/bin/sh.exe' not found (PowerShell wrapper invokes /bin/sh). Manual workaround: run `npx qmd update` from repo root. Changes recorded in memory/MEMORY.md and daily log. Changes committed.
