@@ -1,7 +1,7 @@
 # Agent Memory
 
 Personal context, preferences, and working notes.
-Last reviewed: 2026-05-11
+Last reviewed: 2026-05-12
 
 ---
 
@@ -22,8 +22,8 @@ _No contacts documented yet. Contacts will be added as they appear in daily logs
 
 | Tool | Status | Notes |
 |------|--------|-------|
-| QMD (text search) | Installed (v2.1.0) | 4 collections, 38 docs indexed (last known 2026-04-28). Windows scheduled runs fail due to Unix shebang in the wrapper; use `npx qmd` or fix qmd.ps1. Re-index attempts on 2026-05-07, 2026-05-08, 2026-05-09, 2026-05-10, and 2026-05-11 failed (PowerShell wrapper still invokes /bin/sh; today's run returned '/bin/sh.exe' not found). Manual workaround: run `npx qmd update` from the repo root. |
-| Embeddings (BAAI/bge-small-en-v1.5) | Refresh attempted and incomplete | 384-dim. Last known: 39 chunks embedded across 38 documents (cached at `skills/qmd-memory/cache/embeddings` as of 2026-04-28). Refresh attempts on 2026-05-07, 2026-05-08, 2026-05-09, 2026-05-10, and 2026-05-11 failed due to the qmd wrapper; run `npx qmd update` manually or fix the PowerShell wrapper to complete embeddings. |
+| QMD (text search) | Installed (v2.1.0) | 4 collections, 38 docs indexed (last known 2026-04-28). memory-flush.ps1 failed on Windows due to /bin/sh invocation; fallback executed on 2026-05-12: `npx qmd update --no-install` updated the text index and `python skills/qmd-memory/scripts/azure-embed.py` refreshed embeddings. Embeddings saved to `skills/qmd-memory/cache/embeddings`. Consider fixing memory-flush.ps1 for Windows. |
+| Embeddings (BAAI/bge-small-en-v1.5) | Refreshed (2026-05-12) | 384-dim. 39 chunks embedded across 38 documents; embeddings saved to `skills/qmd-memory/cache/embeddings` (refreshed via fallback on 2026-05-12). |
 | Scheduled maintenance | Active | Daily memory maintenance task configured. Runs daily. |
 | OneDrive sync | Not verified | Upload path not yet used. |
 
