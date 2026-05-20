@@ -34,3 +34,7 @@ Two maintenance runs (scheduled + manual). No logs older than 7 days to archive;
 ## 2026-05-12
 - Daily maintenance performed: no additional daily logs older than 7 days required compaction.
 - memory-flush.ps1 failed on Windows due to /bin/sh invocation; fallback executed: `npx qmd update --no-install` + `python skills/qmd-memory/scripts/azure-embed.py` refreshed the text index and embeddings; embeddings saved to `skills/qmd-memory/cache/embeddings`. Changes recorded and committed.
+
+## 2026-05-20
+- Daily maintenance performed: no unarchived daily logs older than 7 days to compact.
+- Ran `npx qmd update --no-install` (text re-index) and `python skills/qmd-memory/scripts/azure-embed.py` (sentence_transformer provider) to refresh embeddings; embeddings saved to `skills/qmd-memory/cache/embeddings`. Changes recorded and committed.
