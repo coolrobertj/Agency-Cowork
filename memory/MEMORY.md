@@ -1,7 +1,7 @@
 # Agent Memory
 
 Personal context, preferences, and working notes.
-Last reviewed: 2026-05-20
+Last reviewed: 2026-05-22
 
 ---
 
@@ -51,4 +51,8 @@ _Keep this file under 200 lines. Archive stale facts to `memory/Knowledgebase/Pr
 
 ## Maintenance review: 2026-05-20
 - Daily memory maintenance performed: compacted logs (none to archive); ran `npx qmd update --no-install` (text re-index) and `python skills/qmd-memory/scripts/azure-embed.py` (sentence_transformer provider) to refresh embeddings; embeddings saved to `skills/qmd-memory/cache/embeddings`. MEMORY.md and archive updated and changes committed.
+
+
+## Maintenance review: 2026-05-22
+- Daily memory maintenance performed: fallback qmd re-index and azure embedding refresh successful; embeddings saved to skills/qmd-memory/cache/embeddings. MEMORY.md last reviewed and updated. 
 

@@ -38,3 +38,7 @@ Two maintenance runs (scheduled + manual). No logs older than 7 days to archive;
 ## 2026-05-20
 - Daily maintenance performed: no unarchived daily logs older than 7 days to compact.
 - Ran `npx qmd update --no-install` (text re-index) and `python skills/qmd-memory/scripts/azure-embed.py` (sentence_transformer provider) to refresh embeddings; embeddings saved to `skills/qmd-memory/cache/embeddings`. Changes recorded and committed.
+
+## 2026-05-22
+- No daily logs older than 7 days to compact. Verified memory directories and baseline files; scheduled memory-flush.ps1 run. Changes recorded in memory/DailyLogs/2026-05-22.md.
+
