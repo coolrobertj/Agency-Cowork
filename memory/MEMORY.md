@@ -22,8 +22,8 @@ _No contacts documented yet. Contacts will be added as they appear in daily logs
 
 | Tool | Status | Notes |
 |------|--------|-------|
-| QMD (text search) | Installed (v2.1.0) | 4 collections, 38 docs indexed (re-indexed 2026-05-13). memory-flush.ps1 failed on Windows due to /bin/sh invocation; fallback executed on 2026-05-13: `npx qmd update --no-install` updated the text index and `python skills/qmd-memory/scripts/azure-embed.py` refreshed embeddings. Embeddings saved to `skills/qmd-memory/cache/embeddings`. Consider fixing memory-flush.ps1 for Windows. |
-| Embeddings (BAAI/bge-small-en-v1.5) | Refreshed (2026-05-13) | 384-dim. 39 chunks embedded across 38 documents; embeddings saved to `skills/qmd-memory/cache/embeddings` (refreshed via fallback on 2026-05-13). |
+| QMD (text search) | Installed (v2.1.0) | 4 collections, 38 docs indexed. memory-flush.ps1 fails on Windows due to /bin/sh invocation; fallback consistently successful since 2026-05-12: `npx qmd update --no-install` + `python skills/qmd-memory/scripts/azure-embed.py`. Last refreshed 2026-05-20. |
+| Embeddings (BAAI/bge-small-en-v1.5) | Refreshed (2026-05-20) | 384-dim. 39 chunks embedded across 38 documents; embeddings saved to `skills/qmd-memory/cache/embeddings`. Fallback approach working reliably. |
 | Scheduled maintenance | Active | Daily memory maintenance task configured. Runs daily. |
 | OneDrive sync | Not verified | Upload path not yet used. |
 

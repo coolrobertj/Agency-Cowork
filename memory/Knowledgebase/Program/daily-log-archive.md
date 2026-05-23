@@ -42,3 +42,12 @@ Two maintenance runs (scheduled + manual). No logs older than 7 days to archive;
 ## 2026-05-22
 - No daily logs older than 7 days to compact. Verified memory directories and baseline files; scheduled memory-flush.ps1 run. Changes recorded in memory/DailyLogs/2026-05-22.md.
 
+## 2026-05-10
+- Daily maintenance performed: no logs older than 7 days to compact. Memory-flush.ps1 failed due to /bin/sh invocation on Windows; documented workaround (npx qmd update). MEMORY.md updated; changes committed and pushed.
+
+## 2026-05-14
+- Maintenance performed: compacted daily logs older than 7 days into archive, reviewed MEMORY.md and appended review note, ran memory-flush script to re-index QMD and refresh embeddings.
+
+## 2026-05-15
+- Performed daily memory maintenance: no logs to compact. Ran fallback QMD re-index (npx qmd update --no-install) and refreshed Azure embeddings; embeddings saved to cache/embeddings.
+
