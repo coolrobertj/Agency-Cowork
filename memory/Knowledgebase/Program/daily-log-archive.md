@@ -63,3 +63,21 @@ Two maintenance runs (scheduled + manual). No logs older than 7 days to archive;
 ## 2026-05-10
 - Scheduled daily maintenance: no logs older than 7 days to archive (2026-04-26, 2026-04-27, 2026-04-28 already archived). Re-index attempt failed due to /bin/sh invocation. Updated MEMORY.md and committed changes.
 
+## 2026-05-11
+- Daily maintenance: no logs older than 7 days to compact; re-index and embedding refresh attempted and failed (PowerShell wrapper /bin/sh issue). Changes committed.
+
+## 2026-05-12
+- Daily maintenance completed: no additional logs to archive; fallback QMD re-index (npx + azure-embed.py) successful; embeddings saved. Changes committed and pushed.
+
+## 2026-05-13
+- Daily maintenance: compacted logs (none older than 7 days found); fallback QMD re-index and embedding refresh successful; embeddings saved to cache/embeddings. Changes committed and pushed.
+
+## 2026-05-14
+- Daily maintenance: compacted daily logs older than 7 days into archive; reviewed MEMORY.md; ran qmd re-index and embedding refresh; changes committed and pushed.
+
+## 2026-05-15
+- Daily maintenance performed: no logs to compact; ran fallback QMD re-index and refreshed Azure embeddings; embeddings saved to cache/embeddings. Changes committed and pushed.
+
+## 2026-05-16
+- Daily maintenance: compacted and archived summaries (2026-05-07, 2026-05-08); attempted memory-flush.ps1 (permission error); manual npx qmd update recommended. Changes committed and pushed.
+

@@ -1,7 +1,7 @@
 # Agent Memory
 
 Personal context, preferences, and working notes.
-Last reviewed: 2026-05-23
+Last reviewed: 2026-05-24
 
 ---
 
@@ -58,4 +58,7 @@ _Keep this file under 200 lines. Archive stale facts to `memory/Knowledgebase/Pr
 
 ## Maintenance review: 2026-05-23
 - Weekly MEMORY.md review completed: verified Active Programs section (none documented), Key Contacts section (none new from daily logs 2026-05-19, 2026-05-20, 2026-05-22), and Tooling & Integrations (all current; QMD and embeddings last refreshed 2026-05-22). No stale facts detected. File is 58 lines (under 200-line limit). Updated "Last reviewed" date to 2026-05-23.
+
+## Maintenance review: 2026-05-24
+- Daily memory maintenance completed: compacted 6 logs (2026-05-11 through 2026-05-16) into archive; reviewed MEMORY.md — verified Active Programs (none), Key Contacts (none new), and Tooling & Integrations (QMD v2.1.0 with fallback approach working, embeddings refreshed 2026-05-22). No stale facts or outdated dates detected. Re-indexed QMD and refreshed Azure embeddings; embeddings saved to cache/embeddings. Updated "Last reviewed" date to 2026-05-24. Changes committed and pushed.
 
