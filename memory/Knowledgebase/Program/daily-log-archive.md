@@ -51,3 +51,15 @@ Two maintenance runs (scheduled + manual). No logs older than 7 days to archive;
 ## 2026-05-15
 - Performed daily memory maintenance: no logs to compact. Ran fallback QMD re-index (npx qmd update --no-install) and refreshed Azure embeddings; embeddings saved to cache/embeddings.
 
+## 2026-05-07
+- Compacted daily logs (2026-04-25 through 2026-04-28) into archive. Updated MEMORY.md and ran memory-flush for re-index; qmd wrapper failed on Windows (/bin/sh not found). Commit created locally but push failed (no remote configured).
+
+## 2026-05-08
+- Daily maintenance: no logs older than 7 days to compact. Attempted qmd re-index via memory-flush; failed due to /bin/sh on Windows. Recommended manual `npx qmd` run. Commit and push failed due to missing remote.
+
+## 2026-05-09
+- Daily maintenance: no logs older than 7 days required archiving. Ran memory-flush script; re-index failed due to qmd wrapper /bin/sh issue. Updated MEMORY.md with failure documentation and manual workaround. Changes committed.
+
+## 2026-05-10
+- Scheduled daily maintenance: no logs older than 7 days to archive (2026-04-26, 2026-04-27, 2026-04-28 already archived). Re-index attempt failed due to /bin/sh invocation. Updated MEMORY.md and committed changes.
+
